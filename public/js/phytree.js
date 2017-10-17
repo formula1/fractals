@@ -26,16 +26,19 @@ var ct = {
 };
 
 function calcCos(angle, op, ow){
-
-
-	while(angle < 0)	angle += 360;
-	angle = angle%360;
-	return ow*ct[angle]+op;
-
+	// while(angle < 0)	angle += 360;
+	// angle = angle%360;
+	// return ow*ct[angle]+op;
+	return (ow * Math.cos(angle * Math.PI / 180)) + op
 }
 
-function PhyTree(canvas,colors, radius){
+function PhyTree(canvas, colors, radius, initialPoints){
 	console.log("constructed tree");
+	if(!initialPoints){
+		initialPoints = [
+			[0,0], [0,1], [0.5, Math.sqrt(2)/2]
+		]
+	}
 
 	this.stack = new ActionStack("lifo", false);
 
@@ -74,24 +77,10 @@ function PhyTree(canvas,colors, radius){
 			calcCos(90+angle, startpoint.x, scale/2*(1+Math.sqrt(3))) ,calcCos(90+90+angle, startpoint.y,scale/2*(1+Math.sqrt(3)))
 		];
 
-
-
 		var tempc = colors[Math.floor(colors.length*ntnum/numit)];
 
-		ctx.fillStyle = tempc;
-		ctx.beginPath();
-		ctx.moveTo(sqps[0], sqps[1]);
-		for( i=2 ; i < sqps.length-1 ; i+=2 ){ctx.lineTo( sqps[i] , sqps[i+1] )}
-		ctx.closePath();
-		ctx.fill();
-
-		ctx.fillStyle = tempc;
-		ctx.beginPath();
-		ctx.moveTo(tps[0], tps[1]);
-		for( i=2 ; i < tps.length-1 ; i+=2 ){ctx.lineTo( tps[i] , tps[i+1] )}
-		ctx.closePath();
-		ctx.fill();
-
+		drawSquare(ctx, sqps, tempc);
+		drawTriangle(ctx, tps, tempc);
 
 		var lr = Math.round(Math.random());
 		this.stack.add(function(){
@@ -119,13 +108,35 @@ function PhyTree(canvas,colors, radius){
 
 		this.stack.run();
 
-
 	};
 
 
 	this.stack.add(function(){
 		that.draw_the_tree(sp, 0, w, 0);
 	});
+
+	function drawSquare(ctx, sqps, tempc){
+		ctx.fillStyle = tempc;
+		ctx.beginPath();
+		ctx.moveTo(sqps[0], sqps[1]);
+		for( i=2 ; i < sqps.length-1 ; i+=2 ){
+			ctx.lineTo( sqps[i] , sqps[i+1] )
+		}
+		ctx.closePath();
+		ctx.fill();
+	}
+
+	function drawTriangle(ctx, tps, tempc){
+		ctx.fillStyle = tempc;
+		ctx.beginPath();
+		ctx.moveTo(tps[0], tps[1]);
+		for( i=2 ; i < tps.length-1 ; i+=2 ){
+			ctx.lineTo( tps[i] , tps[i+1] )
+		}
+		ctx.closePath();
+		ctx.fill();
+	}
+
 }
 
 

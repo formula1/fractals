@@ -9,48 +9,46 @@
       type="text/javascript"
       src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"
     ></script>
-    <script type="text/javascript" src="/js/async-stack.js" ></script>
-    <script type="text/javascript" src="/js/phytree.js" ></script>
+    <script type="text/javascript" src="./js/easing.js" ></script>
+    <script type="text/javascript" src="./js/async-stack.js" ></script>
+    <script type="text/javascript" src="./js/color-blend.js" ></script>
+    <script type="text/javascript" src="./js/phytree.js" ></script>
   </head>
   <body>
-    <canvas id="thecanvas" width="900" height="480"></canvas>
+    <canvas
+      id="thecanvas"
+      style="position:fixed;top:0;left:0;"
+      width="900"
+      height="640"
+    ></canvas>
 
     <script type="text/javascript">
-      var canvas = document.getElementById("thecanvas");
-      var obj = new PhyTree(
-        canvas,
-        getTreeColors(),
-        450
+      var colors = blendColors("#7a5230", "#44ae40", 8, "easeInOutQuint")
+      .concat(
+        blendColors("#44ae40", "#fab3fb", 9, "easeOutQuint").slice(1)
       );
+      var canvas = document.getElementById("thecanvas");
+      window.addEventListener("load", ()=>{
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        drawTreeOnCanvas(canvas);
+      })
+      window.addEventListener("resize", ()=>{
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        drawTreeOnCanvas(canvas);
+      })
 
-
-      function getTreeColors(){
-          var t_2_b = [];
-          var i = 0;
-          while(0xFF - i * 0x0F >= 0x78){
-            t_2_b[i] = "#"+(
-              ((0xFF) << 16 )
-              | ((0x78 + i * 0x0F) << 8)
-              | (0x00)
-            ).toString(16);
-            i++;
-          }
-
-          var b_2_l = [];
-          i = 0;
-          while(0xFF - i * 0x0F >= 0x78){
-            b_2_l[i] = "#" +(
-              (0xFF - i * 0x1E) << 16
-              | (0xFF << 8)
-              | (0x00)
-            ).toString(16);
-            i++;
-          }
-
-          return  t_2_b.concat(b_2_l);
+      function drawTreeOnCanvas(canvas){
+        // var colors1 = blendColors("#FF7800", "#FFFF00", 8, "easeInOutQuint");
+        // var colors2 = blendColors("#FFFF00", "#00FF00", 9, "easeOutQuint");
+        console.log(JSON.stringify(colors));
+        var obj = new PhyTree(
+          canvas, colors
+        );
+        rnfn = obj.draw.bind(obj);
+        while(true) rnfn();
       }
-      rnfn = obj.draw.bind(obj);
-      while(true) rnfn();
 
 
     </script>
