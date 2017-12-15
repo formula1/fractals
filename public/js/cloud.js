@@ -18,12 +18,14 @@ function Cloud(canvas, oAngle, flip){
 }
 
 Cloud.prototype.run = function(){
+  var t = makeNextTriangles(this, this.parts[0]);
+  if(!t) return false;
   this.parts = this.parts.reduce((netParts, p)=>(
     netParts.concat(makeNextTriangles(this, p))
   ), []);
   function makeNextTriangles(config, oldTriangle){
     var h = oldTriangle[1].sub(oldTriangle[0]).distance();
-    if(h < 1) return [ oldTriangle ];
+    if(h < 1) return false;
     var triA = getInitialTriangle(config, oldTriangle);
     var triB = getInitialTriangle(config, [oldTriangle[1], oldTriangle[2]]);
     // var triB = getNextTriangle(config, oldTriangle, triA);
