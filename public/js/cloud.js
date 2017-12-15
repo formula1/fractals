@@ -1,5 +1,5 @@
 
-function Cloud(canvas, oAngle){
+function Cloud(canvas, oAngle, flip){
   var width = canvas.width;
   var height = canvas.height;
   this.parts = [[
@@ -13,7 +13,7 @@ function Cloud(canvas, oAngle){
   this.ctx = ctx;
   ctx.strokeStyle = 'rgba(0, 0, 0, 0.25)';
   this.ctx.translate(canvas.width / 2, canvas.height / 2);
-  this.ctx.scale(1,-1);
+  this.ctx.scale(flip ? -1 : 1, -1);
   this.ctx.translate(- canvas.width / 2, - canvas.height / 2);
 }
 
