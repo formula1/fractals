@@ -23,6 +23,7 @@ Cloud.prototype.run = function(){
   this.parts = this.parts.reduce((netParts, p)=>(
     netParts.concat(makeNextTriangles(this, p))
   ), []);
+  return true;
   function makeNextTriangles(config, oldTriangle){
     var h = oldTriangle[1].sub(oldTriangle[0]).distance();
     if(h < 1) return false;
